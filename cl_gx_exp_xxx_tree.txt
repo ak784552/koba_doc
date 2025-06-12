@@ -1,0 +1,17 @@
+
+cl_gx_exps_obj_opt --+
+                     |
+                     +-- cl_gx_expsn_obj_opt --+-- cl_gx_exp_gp_obj_opt --+
+                                                                          |
+cl_gx_exp -----------+                                                    |
+                     |                                                    |
+cl_gx_exp_obj -------+-- cl_gx_exp_obj_opt --+                            |
+                                             |                            |
+cl_gx_exp_tree_obj --------------------------+-- cl_gx_exp_obj_opt_tree --+-- cl_gx_exp_gp_obj_opt_tree --+-- cl_gx_compile_gp_opt
+                                                                                                          |
+                                                                                                          +-- cl_gx_ex_obj --+-- cl_gx_ex_tree_sub
+                                                                                                                             |
+                                                                                                                             +-- cl_gx_ex_obj_sub    
+cl_if_compare --+-- cl_if_compare_sub --+-- cl_gx_exp_obj
+                                        |
+                                        +-- cl_gx_exp_tree_obj

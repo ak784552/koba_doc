@@ -1,0 +1,68 @@
+
+ { 一般データ変数 | 定数 } . { 切り出し指定 | 編集指定 }
+
+切り出し開始位置
+切り出し開始位置．．切り出し終了位置
+'切り出し開始位置，切り出し文字数'
+
+#マッチパターン
+##マッチパターン
+%マッチパターン
+%%マッチパターン
+/マッチパターン/置換文字列
+//マッチパターン/置換文字列
+
+cl_gx_str_pos--+--_get_pos_len
+               +--cl_get_str_pos--+--_get_parm_str_pos----_get_pos_len
+               |                  +--_get_str_pos
+               |
+               +--cl_gx_str_edit--+--_gx_str_edit_like--+--_rep_wildcard
+                                  +--_rep_wildcard      +--_get_line_pat-------+--(_get_text_str_pos)
+                                  |                     +--akxs_xlike_set_pat  +--_get_pat_rep
+                                  |                     +--akxs_pxlike         +--akxs_xlike_new
+                                  |                     +--akxs_xlike_free     +--akxs_like_escape
+                                  |                                            +--akxs_xlike_set_line
+                                  |                                            +--akxs_xlike_free
+                                  +--_gx_str_rep--+--_rep_wildcard             +--_get_edit_rep_pat
+                                                  +--cl_rep_regex
+                                                  +--cl_rep_like
+
+cl_shsbs-----+--_get_text_str_pos--+--_get_pos_text
+             |                     +--_get_parm_str_pos-----_get_pos_len
+             |                     +--_get_str_pos_posb--+--akxqm2len
+             |                                           +--akxqmlen
+             +--(cl_gx_str_edit)
+
+
+cl_rep_like--+--(_get_line_pat)
+             +--akxs_xlike_set_pat
+             +--akxs_pxlike
+             +--akxs_xlike_free
+
+
+cl_replace---+--(_get_text_str_pos)
+             +--(_get_pat_rep)
+             +--akxcreplace_opt2
+             +--cl_rep_like
+
+
+cl_repchar---+--(_get_parm_str_pos)
+             +--cl_replace
+
+
+cl_repstrs---+--(_get_parm_str_pos)
+             +--cl_replace
+
+
+cl_glip_grep-+--cl_get_pname_info
+             +--_get_pos_text
+             +--_get_parm_str_pos
+             +--_get_nparm_opt
+             +--_get_edit_rep_pat
+             +--_get_str_pos_posb
+             +--akxs_xlike_new
+             +--akxs_xlike_set_pat
+             +--akxs_pxlike
+             +--akxs_xlike_free
+             +--regcomp
+             +--regexec

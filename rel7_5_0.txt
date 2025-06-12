@@ -40,8 +40,28 @@ coal 7.5.0の機能改善およびバグｆｉｘ
    入力履歴域に保存された文からコマンドtreeを生成し直し、実行するようにした。
    --> cl_path.c
 
+<2025.06.08>
+(9)m_normalize10()とm10w_print_debug()を追加した。
+   --> akxmpa.c
+
+<2025.06.09>
+(10)プリントオプション(flgs)を引数で渡していない関数でのデータ出力については、一時的に、
+   実行時オプションを設定してプリントオプションを効かせていたが、引数(opt_edit)で渡すようにした。
+   また、プリントフォーマットの%rでもプリントオプションが効くようにした。
+   --> cl_user_func.c, cl_cmpt_string.c, cl_func_file.c, cl_const.h
+
+(11)[f]putline()で、区切り文字オプションを有効にしたときは、その文字で区切られるようにした。
+    区切り文字のデフォルトを/cとした。
+    また、データ指定範囲データが展開されるようにした。
+   --> cl_func_file.c
+
+<2025.06.12>
+(12)parm_to_char()の*p1とp1_lenの扱いを解り易くした。
+    また、parm_to_char2(),parm_to_char2_opt_edit(),cl_get_info_str()の引数にp1_lenを追加した。
+   --> cl_cmpt_string.c
+
 <2025.XX.XX>
-(9)
+(13)
    -->
 
 ********************************
@@ -109,8 +129,14 @@ coal 7.5.0の機能改善およびバグｆｉｘ
    [措置]
    --> 
 
+<2025.06.11>
+(8)parm_to_char(),parm_to_char_temp()を呼ぶ前に、文字列を戻すポインタ(p1)を初期化していないヶ所がある。
+   [原因]設定忘れ。
+   [措置]p1 = NULLを入れた。
+   --> cl_conv_arg.c, cl_gx_compute.c, cl_cmpt_comp.c, clprdef.c, cl_cmpt_to.c, cl_cmpt_string.c
+
 <2025.XX.XX>
-(8)
+(9)
    [原因]
    [措置]
    --> 

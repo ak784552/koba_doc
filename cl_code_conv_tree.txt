@@ -1,0 +1,67 @@
+======== cl_code_trans.c ==================================================================
+
+  cl_code_trans   --+-- akxt_code_trans
+
+======== cl_cmpt_string.c =================================================================
+
+  cl_func_str_conv --+-- akxt_get_code_type
+                     +-- akxc_get_code_str
+                     +-- akxctohan
+                     +-- akxctozen
+                     +-- _func_str_conv --+-- akxc_str_conv
+
+  cl_str_conv_get  --+-- akxt_get_code_type
+                     +-- cl_str_conv_type --+-- akxt_code_trans
+
+  cl_str_conv_put  --+-- akxt_get_code_type
+                     +-- cl_str_conv_type --+-- akxt_code_trans
+
+======== clfuncfile.c =====================================================================
+
+  _file_code_conv --+-- cl_file_code_conv --+-- akxc_file_code_conv
+
+======== cl_user_func.c ===================================================================
+
+  let_print_echo  --+-- cl_print_echo_text --+-- cl_print_echo_text_init
+                                             +-- _mcat_text --+-- akxtsapb
+                                             |                +-- _set_flag
+                                             |                +-- cl_gx_exp_obj_opt
+                                             |                +-- _mcat_text_infoparm --+-- cl_dump_info
+                                             |                |                         +-- _check_set_flag
+                                             |                |                         +-- _print_dlm
+                                             |                |                         +-- _print_info_data
+                                             |                |                         +-- _print_info
+                                             |                +-- _do_print_name
+                                             |                +-- akxtmcat
+                                             |                +-- akxtmcats
+                                             +-- cl_print_echo_text_out --+-- cl_file_code_conv
+                                                                          +-- fprintf
+                                                                          +-- akxa_log_new_line
+
+  cl_print_text   --+-- cl_print_echo_text(*)
+
+  cl_echo_text    --+-- cl_print_echo_text(*)
+
+  cl_dump_info    --+-- cl_update_map_array_max
+                    +-- DEBUGOUT_InfoParm
+
+  cl_dump         --+-- akxtsapb
+                    +-- cl_gx_exp_obj_opt
+                    +-- DEBUGOUT1
+                    +-- cl_dump_info(*)
+
+  cl_func_print   --+-- cl_print_echo_text_init
+                    +-- cl_str_print --+-- _mcat_text_infoparm
+                    |                  +-- akxtmcats
+                    +-- _print_dlm
+                    +-- akxtmcats
+                    +-- cl_print_echo_text_out(*)
+
+  cl_func_printf  --+-- cl_eedit
+                    +-- func_file
+
+  let_printf      --+-- cl_printf_text  --+-- cl_print_echo_text_init
+                                          +-- cl_gx_parm_conv_arg
+                                          +-- cl_edit_opta
+                                          +-- cl_print_echo_text_out
+                                          +-- akxtmcat

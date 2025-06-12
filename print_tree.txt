@@ -1,0 +1,61 @@
+
+  lprint    --+
+  echo      --+
+  say       --+
+  print     --+-- let_print_echo --+-- cl_print_echo_text(opt) --+-- cl_print_echo_text_init
+                   lprint(opt=3)                                 +-- _mcat_text --------------+-- cl_gx_exp_obj_opt
+                   print (opt=1)                                 |                            +-- _mcat_text_infoparm ----+-- cl_get_InfoParm2
+                 echo,say(opt=0)                                 |                            +-- _print_dlm              +-- _check_set_flag
+                                                                 |                                                        +-- _print_dlm
+                                                                 +-- cl_print_echo_text_out --+-- FERROROUTL              +-- _mcat_print_info_data --+-- _print_info_data --+-- _print_list
+                                                                                              +-- FPRINTOUTL              +-- _print_info                                    +-- _print_info_data_kako --+-- _print_info_data
+                                                                                              +-- func_file                                                                  +-- _print_data             +-- _print_info
+                                                                                              +-- fprintf                                                                    +-- _print_info
+                                                                                              +-- akxa_log_new_line                                                          +-- _print_dlm
+
+  lprintf   --+
+  printf    --+-- let_printf ------+-- cl_printf_text(opt) ------+-- cl_print_echo_text_init
+                  lprintf(opt=0x83)                              +-- cl_gx_parm_conv_arg
+                  printf (opt=0x81)                              +-- cl_edit_opta(*)
+                                                                 +-- cl_print_echo_text_out(*)
+
+  fprint()  --+                        fprint (opt=1)
+  lprint()  --+                        lprint (opt=3)
+  echo()    --+                      echo,say (opt=0)
+  say()     --+                        print  (opt=1)
+  print()   --+-- cl_func_print ---+-- _func_print_sub ----------+-- cl_print_echo_text_init
+                                   |                             +-- cl_str_print ------------+-- _mcat_text_infoparm(*)
+                                   |                             +-- _print_dlm
+                                   |                             +-- akxa_log_new_line_str
+                                   +-- func_file
+                                       (D_FUC_FELWRITE1)(D_FUC_ELWRITE1)
+
+  fprintf() --+
+  printf()  --+-- cl_func_printf --+-- cl_eedit
+                                   +-- func_file(D_FUC_FELWRITE1)(D_FUC_ELWRITE1)
+
+  sprint()  --+-- _func_print_sub(*)
+                  sprint (opt=1)
+
+  fputline()
+  putline() --+-- cl_str_print(*)
+              +-- parm_to_char_opt_edit(*)
+
+
+  cl_edit      --+-- cl_edit_opta 
+  cl_eedit     --+-- cl_edit_opta 
+  cl_edit_opta --+-- cl_edit_sub --+-- _edit_sub_s ------+-- parm_to_char_opt_edit
+                                   |                     +-- cl_str_print(*)
+                                   +-- cl_double_to_str
+                                   +-- _edit_mpa --------+-- cl_mpa2an
+                                   +-- parm_to_char(*)
+
+  parm_to_char_tmp --------+-- cl_parm_to_char_opt(*)
+  parm_to_char  -----------+-- parm_to_char2(*)
+  parm_to_char_opt_edit ---+-- parm_to_char2_opt_edit(*)
+  parm_to_char2 -----------+-- parm_to_char2_opt_edit(*)
+  parm_to_char2_opt_edit --+-- cl_parm_to_char_opt(*)
+
+  cl_parm_to_char_opt --+-- cl_get_info_str --+-- cl_double_to_str
+                                              +-- cl_mpa2an
+

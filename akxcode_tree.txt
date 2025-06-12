@@ -1,0 +1,127 @@
+
+  akxqissjis
+
+  akxqkanjilen1 --+-- akxqmbslen1 --+-- akxqmbslen --+-- akxqmbsnlen --+-- akxqmbsnelen --+-- akxqu8nelen
+
+  akxqkanjilen  --+-- akxqmbslen(*)
+
+  akxqkanjilen2 --+-- akxqmbsnlen(*)
+
+  akxqiskanji1  --+-- akxqismbs1  --+-- akxqmbslen1(*)
+
+  akxqiskanji   --+-- akxqismbs   --+-- akxqmbslen(*)
+
+  akxqisank     --+-- akxqisank_type
+
+  akxctoank     --+-- akxctoank_type
+
+  akxqis_hankaku_kana --+-- akxqis_hankaku_kana_type
+
+  akxqmbsnwidth --+-- akxqmbsnlen(*)
+                  +-- akxqis_hankaku_kana_type
+
+  akxqkanjiw2   --+-- akxqmbsnwidth
+
+  akxqmbsnalen  --+-- akxqmbsnlen(*)
+
+  akxtmget      --+-- akxqmbsnalen(*)
+
+  akxtmput
+
+  akxcstoj      --+-- akxqmbsnlen(*)
+                  +-- akxcstoj1
+                  +-- akxtmput(*)
+
+  akxcjtos      --+-- akxtmget(*)
+                  +-- akxcjtos1
+
+  akxcetos      --+-- jis_to_sj
+
+  akxcstoe      --+-- akxcstoe2 --+-- sj_to_euc
+
+  akxcetos1     --+-- jis_to_sj
+
+  akxcstoe1     --+-- sj_to_euc
+
+  akxcjtos1
+
+  akxcstoj1
+
+  akxcetoj1
+
+  akxcjtoe1
+
+  akxcstou81    --+-- akxc_sj_to_utf8
+
+  akxcu8tos1    --+-- akxc_utf8_to_sj
+
+  akxcfromjis   --+-- akxt_get_code_type
+                  +-- akxcjtos1
+                  +-- akxcstou81
+
+  akxctojis     --+-- akxcu8tos1
+                  +-- akxcstoj1
+
+  akxctohan     --+-- akxctohan_opt --+-- akxt_get_code_type
+                                      +-- akxctohan_type_opt  --+-- akxt_get_code_type
+                                                                +-- akxqismbs(*)
+                                                                +-- akxctojis(*)
+                                                                +-- _kanjikana
+                                                                +-- akxc_sj_to_utf8
+                                                                +-- akxqmbslen(*)
+
+  akxctohan_type --+-- akxctohan_type_opt(*)
+
+  akxctozen      --+-- akxt_get_code_type
+                   +-- akxctozen_type --+-- akxctozen_type_opt --+-- akxctozen1_type_opt --+-- akxt_get_code_type
+                                                                                           +-- akxqmbsnlen
+                                                                                           +-- akxcu8tos1
+                                                                                           +-- _kanakanji
+                                                                                           +-- _kigo2zen
+                                                                                           +-- akxcfromjis
+
+  akxctozen1     --+-- akxctozen1_type --+-- akxctozen1_type_opt(*)
+
+  akxt_get_lang_type --+-- akxt_chk_lang_type
+
+  akxt_code_trans --+-- akxcu8tos1
+                    +-- akxcetos1
+                    +-- akxcjtos1
+                    +-- akxcstoe1
+                    +-- akxcstou81
+                    +-- akxcstoj1
+
+  akxc_str_conv --+-- akxc_str_conv_iconv --+-- iconv_open
+                  |                         +-- iconv
+                  |                         +-- iconv_close
+                  |
+                  +-- akxc_str_conv_native --+-- akxc_code_conv_init
+                                             +-- akxc_code_conv --+-- _code_conv --+-- akxc_sj_to_utf8
+                                                                                   +-- akxcu8tos1
+                                                                                   +-- akxcetoj1
+                                                                                   +-- akxcetos1
+                                                                                   +-- akxcjtoe1
+                                                                                   +-- akxcjtos1
+                                                                                   +-- akxcstoe1
+                                                                                   +-- akxcstou81
+                                                                                   +-- akxcstoj1
+  akxc_file_code_conv --+-- akxt_get_code_type
+                        +-- akxc_get_code_str
+                        +-- akxc_str_conv(*)
+
+  akxc_set_utf8_file
+
+  akxc_set_sj_utf8
+
+  akxcstou8   --+-- akxqismbs
+                +-- akxc_sj_to_utf8 --+-- _init_sj_utf8
+                                      +-- akxqu8nlen
+ 
+  akxcu8tos   --+-- akxc_utf8_to_sj --+-- _init_sj_utf8
+                                      +-- akxqu8len
+                                      +-- _Unihaslr 
+
+  akxqu8len   --+-- akxqu8elen
+
+  akxqu8nlen  --+-- akxqu8nelen --+-- akxqu8elen
+
