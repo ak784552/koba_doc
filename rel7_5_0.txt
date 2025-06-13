@@ -126,8 +126,10 @@ coal 7.5.0の機能改善およびバグｆｉｘ
    [原因]uintをulongにして"++"しているが、uintに戻すときに、cl_set_parm_bin()を使い、ulong値を
          そのまま渡している。cl_set_parm_bin()は、int値をもらう定義のため、下位32ビットが取られ、
          0となった(ulong値が0x0000000100000000となっているため)。
-   [措置]
-   --> 
+   [措置]int変数に代入してから、cl_set_parm_int()を呼ぶようにした。
+         また、cl_set_parm_int()では、long値に代入して、cl_set_parm_long()を呼ぶようになっていたが、
+         long値の前半分にint値が入るようにした。
+   --> cl_gx_compute.c cl_conv_const_n.c
 
 <2025.06.11>
 (8)parm_to_char(),parm_to_char_temp()を呼ぶ前に、文字列を戻すポインタ(p1)を初期化していないヶ所がある。
@@ -135,8 +137,19 @@ coal 7.5.0の機能改善およびバグｆｉｘ
    [措置]p1 = NULLを入れた。
    --> cl_conv_arg.c, cl_gx_compute.c, cl_cmpt_comp.c, clprdef.c, cl_cmpt_to.c, cl_cmpt_string.c
 
+<2025.06.13>
+(9)--p1,1で、lprint()を実行してもPRINTOUT()の形式で出力されない。
+   [原因]cl_func_print()で処理しているが、D_FUC_FPRINT以外は、D_FUC_ELWRITE1で出力しており、
+         PRINTOUT(),ERROUT()を呼ぶ処理がない。
+   [措置]cl_func_print()の最初で、PRINTオプション(flgs)の処理をしているが、_func_print_sub()に
+         渡しておらず、_func_print_sub()では、flgsの処理を独自で行っているため、flgsの初期化を
+         cl_func_print()に移し、_func_print_sub()に渡すようにした。
+         その上で、PRINTOUT(),ERROUT()を呼ぶ処理を追加した。
+         また、_func_print_sub()は、cl_func_sprint()でも呼んでいるため、flgsの処理を同様にした。
+   --> cl_user_func.c
+
 <2025.XX.XX>
-(9)
+(10)
    [原因]
    [措置]
    --> 

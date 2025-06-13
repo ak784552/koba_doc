@@ -7,8 +7,8 @@
                    print (opt=1)                                 |                            +-- _mcat_text_infoparm ----+-- cl_get_InfoParm2
                  echo,say(opt=0)                                 |                            +-- _print_dlm              +-- _check_set_flag
                                                                  |                                                        +-- _print_dlm
-                                                                 +-- cl_print_echo_text_out --+-- FERROROUTL              +-- _mcat_print_info_data --+-- _print_info_data --+-- _print_list
-                                                                                              +-- FPRINTOUTL              +-- _print_info                                    +-- _print_info_data_kako --+-- _print_info_data
+                                                                 +-- cl_print_echo_text_out --+-- ERROROUT                +-- _mcat_print_info_data --+-- _print_info_data --+-- _print_list
+                                                                                              +-- PRINTOUT                +-- _print_info                                    +-- _print_info_data_kako --+-- _print_info_data
                                                                                               +-- func_file                                                                  +-- _print_data             +-- _print_info
                                                                                               +-- fprintf                                                                    +-- _print_info
                                                                                               +-- akxa_log_new_line                                                          +-- _print_dlm
@@ -23,19 +23,22 @@
   lprint()  --+                        lprint (opt=3)
   echo()    --+                      echo,say (opt=0)
   say()     --+                        print  (opt=1)
-  print()   --+-- cl_func_print ---+-- _func_print_sub ----------+-- cl_print_echo_text_init
-                                   |                             +-- cl_str_print ------------+-- _mcat_text_infoparm(*)
+  print()   --+-- cl_func_print ---+-- cl_print_echo_text_init
+                                   +-- _func_print_sub ----------+-- cl_str_print ------------+-- _mcat_text_infoparm(*)
                                    |                             +-- _print_dlm
                                    |                             +-- akxa_log_new_line_str
                                    +-- func_file
-                                       (D_FUC_FELWRITE1)(D_FUC_ELWRITE1)
+                                   |   (D_FUC_FELWRITE1)(D_FUC_ELWRITE1)
+                                   +-- ERROROUT1
+                                   +-- PRINTOUT1
 
   fprintf() --+
   printf()  --+-- cl_func_printf --+-- cl_eedit
                                    +-- func_file(D_FUC_FELWRITE1)(D_FUC_ELWRITE1)
 
-  sprint()  --+-- _func_print_sub(*)
-                  sprint (opt=1)
+  sprint()  --+-- cl_func_sprint --+-- cl_print_echo_text_init
+                                   +-- _func_print_sub(*)
+                                       sprint (opt=1)
 
   fputline()
   putline() --+-- cl_str_print(*)
