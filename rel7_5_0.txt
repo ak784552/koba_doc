@@ -215,8 +215,13 @@ coal 7.5.0の機能改善およびバグｆｉｘ
 (44)親の設定済み最大インデックス位置を子に反映させる関数ADJUST()を追加した。
    --> cl_gx_func_bexp.c, cl_cmpt_logic.c, clconst.h
 
+<2025.09.18>
+(45)SUBSTRの開始位置または文字数が負のとき、調整する関数mod_pos_len()を追加し、
+    SUBSTR()とドット指定に適用した。
+   --> cl_cmpt_comp.c, cl_cmpl_string.c, clprot.h
+
 <2025.XX.XX>
-(45)
+(46)
    -->
 
 ********************************
