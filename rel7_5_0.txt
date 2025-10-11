@@ -220,8 +220,45 @@ coal 7.5.0の機能改善およびバグｆｉｘ
     SUBSTR()とドット指定に適用した。
    --> cl_cmpt_comp.c, cl_cmpl_string.c, clprot.h
 
+<2025.09.20>
+(46)二項演算でデータＩＤが合わなかったときのエラーメッセージを改善した。
+   --> cl_gx_compute.c, clmessage.c
+
+<2025.09.23>
+(47)ソースファイルのcl_gx_compile.cからobj実行を分離した、合わせて、コンパイル関連の
+    関数をcl_gx_compile.cにまとめた。
+   --> cl_gx_compile, cl_gx_exp_imd.c, cl_gx_ex_obj.c, clprot.h
+
+<2025.09.25>
+(48)EXECコマンドで手続き種別'IP','EP','SC'を指定なしで実行できるようにした。
+   --> cpprexec.c
+
+<2025.09.27>
+(49)マップインデックスの位置指定を配列の先頭からの相対位置に統一した(先頭が0)。
+   --> cl_array.c, cpprproc.c, clmessage.c
+
+(50)配列のデータ配置をFORTRAN形式をデフォルトにした。
+   --> cl_array.c
+
+<2025.09.28>
+(51)配列定義のindex[3](オフセット)が1から始まっていたものを0からに変更した。
+   --> cl_array.c, clfunc.c, clprdef.c, cl_user_func.c, cl_gx_rep_set.c, cl_gx_rep_prm_set.c,
+       cl_gx_ex_obj.c, cl_cmpt_string.c, cl_cmpt_math.c, cl_cmpt_logic.c, clsort.c,
+       clprdeftype.c, cllog.c, clfuncfile.c
+
+<2025.10.08>
+(52)関数AGG()を追加した。
+   --> cl_gx_func_bexp.c, clconst.h
+
+(53)left(),right()で、配列、リスト、データ並びを処理できるようにした。
+   --> cl_gx_func_bexp.c
+
+<2025.10.11>
+(54)関数INSERT()を追加した。
+   --> cl_gx_func_bexp.c, cl_cmpt_logic.c, clconst.h
+
 <2025.XX.XX>
-(46)
+(55)
    -->
 
 ********************************
@@ -480,8 +517,18 @@ coal 7.5.0の機能改善およびバグｆｉｘ
    [措置]マップする位置と配列の長さに合わせるようにした。
    --> cl_array.c
 
+<2025.09.29>
+(29)オプション１５の0x01(開始インデックス=1)が、配列定義時の後で設定しても機能していない。
+   [原因]cl_gx_conv_index2()の中に処理がない。
+   [措置]①_set_index2()で、範囲指定の次元に対応するビットを1にセットし、これをリターンし、
+           pIndex->uaux2に設定する。0x01ビットが次元1に対応する。
+         ②cl_gx_conv_index2()を呼ぶ前に、index_info[3]にpIndex->uaux2を設定する。
+         ③cl_gx_conv_index2()の中では、このビットが1でない次元の開始インデックスが0で、
+           オプション１５の0x01がオンのとき、開始インデックスを1に設定する。
+   --> clprdef.c, clprdeftype.c, cl_array.c, cl_cmpt_logic.c, cl_gx_ret_set.c
+
 <2025.XX.XX>
-(29)
+(30)
    [原因]
    [措置]
    --> 
