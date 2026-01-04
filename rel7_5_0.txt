@@ -257,8 +257,85 @@ coal 7.5.0の機能改善およびバグｆｉｘ
 (54)関数INSERT()を追加した。
    --> cl_gx_func_bexp.c, cl_cmpt_logic.c, clconst.h
 
+<2025.10.18>
+(55)関数VAR_LIST()を追加した。
+   --> cl_gx_func_bexp.c, cl_cmpt_logic.c, cl_user_func.c, clconst.h, clprot.h
+
+<2025.11.1>
+(56)for each xでxに対象データの値を設定する機能とオプション22を追加した。
+    従来のオプション22は、オプション15に移した。
+   --> clprloop.c
+
+<2025.11.2>
+(57)for eachに、eachv、eachiを追加した。
+   -->cltrbexp.c, cltrloop.c, clprloop.c, clconst.h
+
+<2025.11.4>
+(58)リストまたはデータ並びの要素がないいときは、空のリストまたはデータ並びとした。
+   --> cl_gx_ret_set.c, cl_gx_func_bexp.c
+
+<2025.11.13>
+(59)##if 0 等でのスキップ処理を、_proc_pragma()では、フラグ(giPREPRO_SKIP)を立てるのみのし、
+    スキップ処理は、lex()本体で行うようにした。これは、スキップ処理中でも、コメント、
+    引用符等を識別する必要があるため。
+   --> cllex.c
+
+<2025.11.24>
+(60)CSTRのキャストを使用できるようにした。
+   --> cl_compute.c, cl_gx_compile.c
+
+<2025.11.25>
+(61)データ型にUCHAR,SHORT,USHORT,BYTEを、関数とキャストにCUCHAR,CSHORY,CSHORT,CBYTEを追加した。
+   --> clconst.h, cl_gx_compute.c, cl_gx_func_bexp.c, cltrbexp.c
+
+<2025.12.02>
+(62)コメント内、引用符内、##if 0等での処理を以下の様にした。
+    (1)コメント内
+       "/*","*/","//"以外は、無視する。
+    (2)引用符内
+       開始引用符以外は、無視する。
+    (3)##if 0等の中(スキップモード中)
+       "#"以外は、その行をスキップする。
+   --> cllex.c, colmain.c, clprimport.c
+
+<2025.12.03>
+(63)オプションのデフォルト値をadd/delするCの関数cl_set_opt_add_del()を追加した。
+    関数GETARGS()に適用した。
+   --> cl_cmpt_string.c
+
+<2025.12.07>
+(64)condListにrbuf_lenを追加し、スクリプト読み込み処理でのバッファ長をこれに設定するようにした。
+    cl_get_str()では、BUFLENを上記の1/2に変更した。
+   --> cllexfnc.c, cllex, cllocal.h
+
+(65)スクリプト読み込み処理において、1行がBUFLENを超えるときにマルチバイト文字が、
+    行終わりに掛かるときの処理を見直した。
+   --> cllex.c
+
+<2025.12.09>
+(66)##pragmaで、スクリプトの文字コードを指定できるようにした。
+    Cの関数 akxt_set_xml_attr()とakxt_get_attr_val() を追加した。
+   --> akxgetstpl.c, akxlib.h, cllex.c
+
+<2025.12.20>
+(67)変数のスコープにブロックを追加した。また、スコープに関するoptのdefine値を整理した。
+   --> cl_conv_parm.c, cl_gx_compile.c, clprdef.c, cl_proc_bexp.c, clglobal.c, cltrbexp.c,
+       cl_const.h, cl_prot.c
+
+<2025.12.21>
+(68)for eachの要素用変数が、ループを開始する前に作成されているので、ループを開始するときに
+    ブロック変数で作成するようにした。
+    また、eachkでも要素用変数にインッデックスを設定するようにした。
+   --> cpprloop.c, cptrbexp.c
+
+
+<2025.12.25>
+(69)「マップインデックスの位置指定を配列の先頭からの相対位置に統一した(先頭が0)。」
+    これにしたが、マップ位置は、配列定義上のインデックスの方が分かり易いので、そうした。
+   --> clprdef.c, clprproc.c, clconst.h
+
 <2025.XX.XX>
-(55)
+(70)
    -->
 
 ********************************
@@ -527,8 +604,261 @@ coal 7.5.0の機能改善およびバグｆｉｘ
            オプション１５の0x01がオンのとき、開始インデックスを1に設定する。
    --> clprdef.c, clprdeftype.c, cl_array.c, cl_cmpt_logic.c, cl_gx_ret_set.c
 
+<2025.10.17>
+(30)mapped arrayの定義で、データエリア用のpVarIndexをMallocしている。
+   [原因]mapped arrayの処理をarrayの処理に統合したときの見落とし。
+   [措置]cl_pr_ex_def_array_parm()の中で、mapped arrayのときは、optにD_GX_OPT_NOALLOC_INDXを
+         立てるようにした。
+   --> cpprdef.c
+
+<2025.10.18>
+(31)test_print4.clを実行すると、print ttaで、 TTTのDec z[5]の後に、
+    「コピー元の配列[z]が無効です。(1)」が出る。
+   [原因]Dec z[5]を出力した後で、cl_array_check_valid()を呼んでいるが、その中で、親のpi_idが
+         'R'でないため、エラーになっている。
+         ttaのデータ型TTTのzのpi_pauxが不正な値になっているため。
+         _get_def_member()で、zの定義を作成しているが、そこで使っているpInfoParmが、前の処理で
+         使われており、zの定義でpi_pauxを再設定していない。
+   [措置]zの定義を作成する前に、pInfoParmをクリアするようにした。
+         これで直ったが、ソースを追うと、ttaを作るときには、pi_pauxにzのアドレスを設定している
+         ように見えるので、なぜ、これで直ったのか不明。
+   --> clprdeftype.c
+
+<2025.10.21>
+(32)PRIVATEの配列xが定義済みで、func fnの中で、LOCALの配列xを定義すると、gidにPRIVATEの値が
+    設定される。
+   [原因]配列定義時に、_chk_define()を呼んで、PRIVATE変数xあり、新規に定義するxはLOCALと
+         なっている。この情報を呼び出し元に返すときに、argv[3]が未設定なら"LOCAL"を設定している。
+         _chk_define()中では、定義済みxがないかをチェックするcl_gx_check_defin()を呼んでいて、
+         argv[3]には"PRIVATE"が設定済みとなっている。
+         _chk_define()から戻ったところで、既存と新規のscopeが一致しないため、新規にLOCALに、
+         xを作成している。このとき、scopeにargv[3]を使っているため、gidがPRIVATEの値になっている。
+   [措置]argv[3]そのままにし、argv[7]に新規定義のscopeを設定し、これを使うようにした。
+   --> cpprdef.c, cpprdeftype.c
+
+<2025.10.22>
+(33)PRIVATEの配列xを関数の中で定義し、xを返却し、戻り値をprintすると、「配列は無効です。(2)」の
+    エラーになる。
+   [原因]cl_gx_func_method()の始めで、pInfoParmWにgidを設定しているが、cl_gx_func_mk_retval()で
+         pInfoParmWが再作成され、gid消えている。
+   [措置]cl_gx_func_mk_retval()を呼んだ後で、gidを再設定するようにした。また、以下を変更した。
+         cl_process_return()の中で、返却値用のpInfoParmWに戻り値を設定する処理を以下とした。
+         (1)クラス定義ではなくて、配列または構造体を返すときは、
+            (A)ローカル変数のときは、DEF_ZOK_DATAモードのcl_gx_rep_info_als()で全てをコピーする。
+            (B)その他のときは、cl_gx_copy_info()でコピーする。
+         (2)その他のときは、cl_gx_rep_info_als()で通常にコピーする。
+   --> cl_gx_func_bexp.c, clprret.c, cl_execute_proc.c
+
+(34)redefine処理の_def_array()の中で落ちる。
+   [原因]pIndex->pVarIndexの再取得処理で落ちている。
+   [措置]redefineでは、pIndex->pVarIndexは、常にNULLなので、pIndex->pVarIndexの再取得処理を
+         行わないようにした。
+   --> cpprdef.c
+
+(35)exec_all_test.clで、test_XML.clを実行すると、ファイルオープンエラーになる。
+   [原因]list_test.txtの中の、「test_XML.cl '' test2.xml」を実行しているが、パラメータ設定が
+         %()='',' ','test2.xml'となり、' 'でopenしている。
+         akxtnsplit()の中で呼んでいるakxtgwnsl()のsepに引用符が入っていないため、引用符処理が
+         正しく行われていない。
+   [措置]akxtgwnsl()のsepをgsepとし、sep+"'\""を設定した。また、exec_all_test.clの中で呼んでいる
+         split()の引数にオプション値:8(同じ区切り文字が連続するときは、1つにする)を設定した。
+   --> akxlib.c, exec_all_test.cl
+
+<2025.10.24>
+(36)(dec)ll & 0x01で、0x01が1にならない。
+   [原因]cl_cmpt_math()の中で、0x01の値をVal2[0]で取得しているが、(atr1==DEF_ZOK_BINA)のときのみ、
+         演算で使用するValue1、Value2に取得した値を設定している。
+   [措置]atr1とatr2を別々に設定するようにした。
+   --> cl_cmpt_math.c
+
+<2025.10.25>
+(37)redefine My.sosu n;を実行すると、「cl_gx_get_info_parm_opt: [My.sosu]メンバーは指定できません。」
+    のエラーが出る。
+   [原因]_check_redefine()とcl_get_def_type()の処理で、My.sosuの形を想定していないため。
+   [措置]両関数で、名前の中に'.'があるときは、cl_gx_expsn_obj_opt()を呼ぶようにした。
+   --> clprdef.c, clprdeftype.c
+
+<2025.10.27>
+(38)クラス内の関数の中から同じクラス内の他の関数をMyを付けないと関数なしになる。
+   [原因]cl_search_leaf_and_inner()の中で、一つ上を順に調べる処理を行っているが、上位の関数パスを
+         作成する処理に余分(なぜ、あるかは不明)なcmpがある。
+   [措置]cmp処理を削除した。
+   --> cl_execute_proc.c
+
+<2025.10.28>
+(39)DECのredefineで要素数が変わらない。
+   [原因]_def_array()で、前の定義と新しい定義を比較して変える必要があるかを判定しているが、
+         DECのときは、preとscaのみを比較しているため、要素数が変わらなかった。
+         DEC以外のときは、データサイズと要素数を比較している。
+   [措置]DEC以外のときも要素数が比較されるようにした。
+   --> cpprdef.c
+
+<2025.10.31>
+(40)##define M (20000) のように設定すると、「パラメータが必要です。」のエラーになる。
+   [原因]置換データが'('から始まるときは、パラメータありの置換処理を行い、エラーになっている。
+         _get_def_cont()の最初では、置換文字列の次の空白が残るようにスキップ処理を入れていないが、
+         最後のtrimしているので、空白が消えている。
+   [措置]置換データの先頭は、空白文字のときは、その次からをtrimするようにし、_rep_define_sub()
+         では、置換データ中に'('があるとき、パラメータありの置換処理を行うようになっているのを
+         置換データの先頭が'('のときに、パラメータありの置換処理を行うようにし、空白文字のときは、
+         2バイト目からを置換データとするようにした。
+   --> cllex.c
+
+<2025.11.1>
+(41)x[1..N+1]のNが##define N 100のとき、置換されない。
+   [原因]置換処理のワード取り出しで'.'が区切り文字に入っていない。
+   [措置]ワード取り出しに、cmpgtwdx()を使うようにした。
+   --> cllex.c, clprot.h
+
+<2025.11.7>
+(42) XXX(a,b,c) から始まり、XXXがパラメータ付きの置換対象のとき、「パラメータが必要です」の
+    エラーになる
+   [原因]XXXがコマンドの可能性があるため、'('の前で一旦区切って、XXXのみで、kugiri処理を行う。
+         kugiri処理の前に、置換処理を行うが、XXXがパラメータ付きの置換対象のときは、XXXのみの
+         ため「パラメータが必要です」のエラーになっている。
+   [措置]置換処理のパラメータrep_optを追加し、コマンドのときは、rep_opt=1として、エラーにしない
+         ようにした。
+   --> cllex.c
+
+<2025.11.9>
+(43)パラメータ付きの置換で、置換された中に、さらに置換があると、元のラインデータを一部が
+    上書きされる。
+   [原因]置換されたものを再帰的に置換しているが、置換文字列長が元より大きいときの挿入処理に
+         不具合がある。
+   [措置]置換処理を以下のように変更した。
+         (1)wkstrに、データを入れ始める直前の状態(括弧対検査用の変数の値等)を保存する
+         (2)再帰処理を止め、1置換毎に、置換対象文字列の開始位置から再度、構文解析を再開する。
+         (3)置換後、括弧対検査用の変数の値等を戻し、構文解析を再開する。
+   --> cllex.c
+
+<2025.11.12>
+(44)procの中で、構造体配列を定義すると、エラーになる。定義するときに、private,static等を
+    付けるとエラーにならない。
+   [原因]iParm[0]=23,iParm[1]=0でcl_get_def_alsize()を呼び出し、エラーになっている。
+         procの中で、private,static等が付いているときは、定義文としてcl_pr_ex_def_array()を
+         呼び出し、これが、i_parm=NULL で、cl_pr_ex_def_array_parm()を呼び出している。
+         一方、private,static等がないときは、型定義があれば、この情報をi_parmに設定して、
+         cl_pr_ex_def_array_parm()を呼び出している。
+         cl_pr_ex_def_array_parm()では、最初の属性取得で、デフォルトでiParm[1]=sizeof(char *)
+         としており、i_parm=NULLのときは、これが、それ以降変わらないが、i_parm<>NULLのときは、
+         i_parmでiParmを上書きする。i_parm[0]=0,i_parm[1]=0のため、iParm[1]=0となっている。
+   [措置]型定義取得(cl_get_def_type())の中で、型定義のときは、iParm[1]=sizeof(char *)とした。
+   --> cpprdeftype.c
+
+<2025.11.13>
+(45)##if 0 等で、それ以降に、##defineがあるとskip処理が中断する。
+   [原因]skip処理の中で、##等で始まる行があると、そこでskip処理を抜けている。
+         また、include、resume処理で、ifnest_cnt,ifnest[],iftrue[]を保存、復旧していない;
+   [措置](1)skip処理の中で、ifdef,ifndef,if,elif,else,endif,elifdef,elifndefのときのみ、
+            skip処理を抜けるようにした。
+         (2)include、resume処理で、ifnest_cnt,ifnest[],iftrue[]を保存、復旧するようにした。
+   --> cllex.c
+
+<2025.11.18>
+(46)関数の中で作成したローカルの配列をprive変数xpに代入し、それをreturnすると、
+    返却用変数(関数名nnnn)の表示が不正になる。
+   [原因]ローカルの配列が削除されたため。
+   [措置]配列または構造体において、親があり親がローカル変数のときは、実体をコピーしたものを
+         返すようにした。また、ローカル変数をreturnするときも実体をコピーしたものを返すようにした。
+   --> clprret.c
+
+(47)関数の中で作成したローカルの構造体xをprive変数xpに代入し、関数から帰ったところでxpを
+    printすると、表示が不正になる。
+   [原因]構造体xが削除されているため。
+   [措置]配列と同様に有効性をチェックするようにした。
+   --> clprdeftype.c, cl_user_func.c
+
+<2025.11.24>
+(48)bexp x = e IN b c;を実行すると、「 m()は指定できません。」のエラーになる。
+   [原因]cl_gx_bexp()の中で、prmpをppParmに変換し、cl_gx_bexp2()を呼び出している。
+         cl_gx_bexp2()の中で、cl_cmpt_comp()を呼び出すときには、prmpをNULLにしているが、
+         cl_cmpt_comp()の中で、INの処理を行うときに、cをppParmに変換するためにprmpを使っている。
+   [措置]cl_cmpt_comp()にnparmとprmpを渡すのを止め、INとiINは、cl_gx_bexp2()の中で、
+         cl_gx_func_bexp()を呼ぶようにした。
+   --> cl_cmpt_comp.c, cl_gx_compute.c, clfunc.c, cl_gx_rep_set.c, cl_proc_bexp.c
+
+(49)$$%(1)や$%(1)が、$1の値になる。
+   [原因]組み込み関数呼び出しの引数を整理した再に、cl_func_conv_parm()にpOperatorが
+        渡らなくなったため。
+   [措置]まず、arg_kbnの21,22の実装が誤っていたため以下に変更。
+         arg_kbn=21 ==> arg_kbn=20,ret_kbn=2
+         arg_kbn=22 ==> arg_kbn=20,ret_kbn=3
+         その上で、arg_kbn=21でpOperatorを渡すようにした。
+   --> cl_gx_func_bexp.c, clfunc.c
+
+<2025.11.25>
+(50)exec_all_test.clで、test_split.cl '' '' 2 を実行すると、数字以外の文字"'"があるの
+    エラーになる。
+   [原因]%1,%2が"''"になっている。split()でオプションを指定していないため。
+   [措置]引用符を削除する0xc0を指定して。また、akxtnsplit()では、optに0x80が指定されたら、
+         0x40を自動で立てるようにした。
+   --> axlib.c, exec_all_test.cl
+
+(51)sample_kojin.clを実行すると、f = family[j++];で、「構造体は無効です(2)」のエラーになる。
+   [原因]family_tab[2]に初期値を設定する処理(cl_set_array_ix2())で、以下があり、
+         pInfoParmW->pi_hlen = ppParm[0]->pi_hlen; <== これが何をやっているかは、忘れた。
+         pInfoParmW->pi_hlenがクリアされている。
+   [措置]pInfoParmW->pi_hlenを再設定するようにした。
+   --> cl_gx_rep_set.c
+
+(52)exec_all_test.clで、test_XML.cl '' test2.xml を実行すると、ファイルオープンエラーになる。
+   [原因]No.50と同じ。
+   [措置]
+   --> 
+
+<2025.12.03>
+(53)/tmp/coal_new/src/appl/coal/testでcoal_nのみを実行しても何も出力されない。
+   [原因]cl_getenv()でakb.iniを読んでプログラム名のセクションをサーチしているが、ないときに
+         -1でリターンして、エラー終了している。
+   [措置]上記のときは、-100を返すようにした。
+   --> akbname.c
+
+<2025.12.09>
+(54)define optionの設定が、それ以降のcl_lex()で解析に反映されない。
+   [原因]cl_lex()で、define option/optionsコマンドのtreeを作成するときに、optionを
+         設定しているが、cl_lex()では、スクリプト解析前に、optionを取り込んでいるので、
+         途中の解析には反映されていない。
+   [措置](コマンドのkugiri処理終了時に、処理したコマンドが、define option/optionsのときは、
+         optionを取り込み直すようにした。)
+         上記は、判定にコストがかかるので、区切り文字が';'のときは、無条件にoptionを
+         取り込み直すようにした。
+   --> cllex.c
+
+<2025.12.19>
+(55)ブロック処理から抜けたときに、ブロック構造体でFree()されていない変数がある。
+   [原因]見落とし。
+   [措置]cl_reset_block_cb()を作成した。
+   --> cl_if_pre_proc.c, cpprloop.c, cl_process_end_if.c, cl_prot.h
+
+<2025.12.21>
+(56)連想配列のデータにnull文字列を設定し、集合演算で作成した配列要素がMallocされていない
+    null文字列データにも係わらず、Mallocされたフラグが立ち、Mallocされていないエラーが出る。
+   [原因]_gx_rep_all_hash()の中で要素をコピーした再に、_gx_rep_set_sca_im()を呼んで、
+         Mallocされたフラグが立っている。
+   [措置]コピー元が、Mallocされていないnull文字列データかどうかを判定する関数を作成し、
+         そうでないときのみ_gx_rep_set_sca_im()を呼ぶようにした。
+         _gx_rep_all_array()も同様とした。
+        (注)配列要素をコピーする関数の中で、当該要素のコピー処理では、Mallocしたときのみ
+            _gx_rep_set_sca_im()を呼んでいるので、コピーする関数からリターンした後で、
+            _gx_rep_set_sca_im()を呼ぶ処理は不要と思われるが、コピー関数で別ルートで処理
+            されることもあるので、このままとした。
+   --> cl_gx_rep_prm_set.c
+
+<2025.12.23>
+(56)"if leng(%1)<8 || !(%1 is 'N') then"を実行するとエラーになる。
+   [原因]tree作成処理の中で、"is"の文字列演算子(mc=1000+x)を処理対象外としてエラーにしている。
+   [措置]mc>=1000のときは、２項演算子として処理するようにした。
+   --> cl_gx_tree.c
+
+<2025.12.25>
+(57)define mappedarray %m "" 10;を実行すると、""の部分が無視される。
+   [原因]cmd->parl[0]作成されたコマンドラインを実行するようになっているが、cmd->parl[0]を
+         作成するときに、len=0だと、空文字になってしまいコマンドラインから消えている。
+   [措置]上記でlen=0のときは、"NULL"を設定するようにした。cl_tr_gather()も同様にした。
+   --> cllex.c, cltrbexp.c
+
 <2025.XX.XX>
-(30)
+(58)
    [原因]
    [措置]
    --> 
