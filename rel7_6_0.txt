@@ -14,8 +14,179 @@ coal 7.6.0の機能改善およびバグｆｉｘ
    cl_chk_act()を使うようにした。
    --> clprdeftypr.c
 
+<2026.01.19>
+(3)ハッシュ関数のul処理において、uflを追加し、delete処理時のulの更新を効率化した。
+   また、defineでソースコードを定義し、いくつかの処理を共通化した。
+   --> akxshash.c, akxshasl.c, akxmemtool.c, akxlib.h
+
+<2026.01.23>
+(4)ELEMENT()関数、SET_CONST()関数を追加した。
+   --> cl_gx_func_bexp.c, cl_cmpt_logic.c, cl_const.h
+
+<2026.01.30>
+(5)ハッシュ配列のハッシュ表でのデータをInfoParmへのポインタではなく、InfoParmの実体に変更した。
+   --> cl_gx_exp_imd.c, cl_gx_ex_obj.c, clprdef.c, cl_cmpt_logic.c, cl_gx_rep_set.c,
+       cl_array.c, cl_gx_rep_prm_set.c
+
+<2026.03.06>
+(6)初期値設定で、データ個数が1000を超えるたときには、エラーにしていたが、atrがデータ
+   (atr>=3000 && atr<=6000)のときは、atrにidaを加えるのを止め、atr++とし、da[idai]のidaiは、
+   直接ida-1を設定するようにした。
+   atr=1000のときは、obj実行時に、idai=atr-1001でdaを取得しているため、
+   (atr==1000 || atr==2000 || atr==7000 || atr==8000)のときは、現状のままとした。
+   --> cl_gx_compile.c
+
+<2026.03.11>
+(8)関数定義の戻り値属性にVOIDを追加し、このときは、returnなしでも、NULL値を返すようにした。
+   --> cltrbexp.c, clprproc.c, clprdeftype.c, akxlib.h, akbconst.h
+
+<2026.03.13>
+(9)for each xで、配列やデータ並び式を式の並びで指定したときもそれぞれの要素をxに
+   設定するようにした。
+   --> clprloop.c
+
+<2026.03.15>
+(10)関数TO_DNARA()にオプションOPTを追加し、出力形式、データタイプを指定できるようにした。
+   --> cl_cmpt_to.c
+
+<2026.03.17>
+(11)関数APPEND()のOPTの0x01ビットのON/OFFを逆にした。
+   --> cl_gx_rep_set.c
+
+<2026.03.18>
+(12)関数COMBINATION()を追加した。また、範囲を展開するCの関数cl_gx_range_tenkai_sub()を作成し、
+    cl_gx_range_tenkai()と_print_info_data()に適用した。
+   --> cl_gx_logic.c, cl_gx_func_bexp.c, cl_gx_exp_imd.c, cl_user_func.c, clprot.h
+
+(13)データ型やデータのMAX値用のシステム変数定義をExtValName[]から外し、新たにSysConstName[]を
+    作成し、これを検索する関数cl_get_sys_const_name()を作成した。
+   --> cl_conv_sysvar.c, cl_anal_parm.c, clglobal.c, clprot.c
+
+<2026.03.19>
+(14)ＩＳ演算子の'T'に、'+'と検査項目名を指定し、どういう属性を持つか、または、検査項目名の
+    属性を持つかを調べられるようにした。
+    'I'にデータＩＤを指定し、そのデータＩＤか同かを調べられるようにした。
+   --> cl_cmpt_is.c, cltrbexp.c, clconst.h
+
+<2026.03.22>
+(15)関数REVERSE()を追加した。
+    また、mem_set_int()等の同じコーディング部分をdefineにした。reverse系も追加した。
+   --> cl_gx_logic.c, cl_gx_func_bexp.c, clconst.h, clprot.h, akxlib.c, akxlib.h
+
+<2026.03.23>
+(16)関数ROTSTE()を追加した。
+   --> cl_gx_logic.c, cl_gx_func_bexp.c, clconst.h, clprot.h, akxlib.c, akxlib.h
+
+<2026.03.26>
+(17)関数PERMUTATION()を追加した。
+    また、CombinationsArrayRecur(),cl_func_combination(),_print_info_data()を
+    cl_gx_logic.cからclfuncmath.cに移した。
+   --> cl_gx_logic.c, clfuncmath.c, cl_gx_func_bexp.c, clconst.h, clprot.h
+
+(18)cl_check_data_id2()の戻り値(rc)が、(rc>=-15 && rc <=-1)のとき、ECL_CHK_VAR_ERRORを加えた。
+   --> cl_gx_compute.c
+
+<2026.4.2>
+(19)'\0'の真偽を偽とした。
+   --> cl_cmpt_logic.c
+
+<2026.04.05>
+(20)append()のリストとデータ並びに対して、重複チェックのオプションを追加した。
+   --> akxsrblist.c, cl_gx_rep_set.c, clconst.h
+
+(21)関数LOOKUP()を追加した。
+   --> cl_gx_rep_set.c, cl_gx_func_bexp.c, clconst.h, clprot.h
+
+<2026.04.16>
+(22)インポートＩＤを付けるようにした。
+   --> clprimport.c, cl_execute_proc.c, cl_gx_func_bexp.c, cl_gx_ex_obj.c, cl_gx_compile.c,
+       cl_conv_parm.c, cllog.c, clexescr.c
+
+(23)2重引用符の中も括弧()[]{}の対応をチェックしないようにした。
+   --> cllex.c
+
+<2026.04.24>
+(24)cl_gx_str_pos(),cl_shsbs(),cl_rep_like(),cl_replace(),cl_grep()関連のソースを
+    cl_cmpt_comp.c, cl_cmpt_string.cからcl_gx_str_pos.cを新設してこれに移動した。
+   --> cl_gx_str_pos.c, cl_cmpt_comp.c, cl_cmpt_string.c, clprot.h
+
+<2026.04.26>
+(25)append()で、追加するデータが配列、リスト、データ並び、範囲でデータ指定のときは、
+    その要素を追加するようにした。
+   --> cl_gx_rep_set.c
+
+<2026.04.27>
+(26)setarray()で、追加するデータが配列、リスト、データ並び、範囲でデータ指定のときは、
+    その要素を設定するようにした。
+   --> cl_gx_rep_set.c
+
+<2026.04.28>
+(27)akxs_xhash_next_i()を使ってハッシュ配列の要素を出力すると、登録した逆の順序になるのを
+    登録順になるようにした。
+    (1)fnの後ろにsqn[1+maxreg]を挿入。
+    (2)'T'のときに、sqn[1]からfnで得られるiを設定(これが逆順になっている)。
+       sqn[0]には、設定した個数を入れる。
+    (3)akxs_xhash_next_i()では、sqn[0]の位置からsqnを逆順に読み出す。
+   --> akxshash.c
+
+<2026.04.29>
+(28)データ並びをデータ並びに代入するとき、右辺の要素がNULLパラメータのときは、
+    対応する要素への代入をスキップするようにした。
+    また、これとは、逆になるオプションを追加した。
+   --> cl_gx_ex_obj.c
+
+(29)ハッシュの'P'or'K'で指定するiを求めるのにulistを使えるかの指標であるiMAXを
+    以下のように変更した。
+      ・iMAX=max のときは、_hashn()は使えない
+      ・iMAX<=0  のときは、_hashn()を使える
+      ・iMAX=-maxのときは、'P'or'K'による登録済みキー取得は、_hashn()を使わない方が速い
+    また、akxs_xhash_next_i()の中でi++としているのをやめた。
+  　これを使用している処理を修正した。
+   --> akxshash.c, akxshasl.c, akxmemtool.c, clprimport.c, clprundef.c, clprdeftype.c,
+       cl_execute_proc.c, clfunc.c, clclear.c, cl_array.c, cl_cmpt_logic.c,
+       cl_gx_rep_prm_set.c, cl_gx_rep_set.c
+
+<2026.04.30>
+(30)(27)でsqnを導入したが、uflが作成順になっていたため、sqnをやめ、uflを使うことにした。
+   --> akxshash.c
+
+<2026.05.06>
+(31)BLOCK変数になる仕様を見直した。
+   --> cl_conv_parm.c, clprloop.c, cl_proc_bexp.c, clprdef.c, clprdeftype.c, akxssrch.c,
+       clglobal.c, clprot.h
+
+(32)BLOCK変数のスコープをblockと表示されるようにした。
+   --> cl_conv_parm.c, cl_user_func.c, cl_gx_compute.c, cl_gx_rep_prm_set.c, clfunc.c,
+       clconst.h, clprot.h, akxlib.h
+
+<2026.05.09>
+(33)cl_gx_clear_var_obj_sub()処理で、varnamをvarnamaとし変数名へのポインタ配列を
+　　渡せるようにした。
+   --> cl_gx_ex_opj.c
+
+(34)implicit処理で、エラーのときにエラーメッセージを出すようにした。
+   --> clprdeftype.c
+
+<2026.05.20>
+(35)forの初期値設定でデータ型を指定できるようにした。
+   --> clprloop.c, cl_proc_bexp.c
+
+<2026.06.08>
+(36)akb.iniのCoalセクションに、defineを追加した。
+   --> coalmain.c
+
+<2026.07.04>
+(37)implicitでcomplexとrationalを指定できるようにした。
+    データ型指定で、decimal(*)等のときは、長さや精度、小数点以下の桁数指定がないものと
+    見なすようにした。
+   --> clprdeftype.c, clprdef.c, cl_gx_ex_obj.c
+
+<2026.07.11>
+(38)10進固定小数点を含む演算の結果を10進固定小数点にするオプションを追加した。
+   --> cl_cmpt_math.c, cl_gx_func_bexp.c
+
 <2026.XX.XX>
-(3)
+(39)
    --> 
 
 ********************************
@@ -76,8 +247,292 @@ coal 7.6.0の機能改善およびバグｆｉｘ
    [措置]format(av0[0])がNULLでないときは、av0をavにコピーするようにした。
    --> akxalog.c
 
+<2026.01.06>
+(7)EUCの全角濁点・半濁点カナを半角に変換したとき2文字目以降が不正な値になる。
+   [原因]半角カナをJISからEUCに戻すときに、半角の濁点・半濁点を設定する処理で設定している
+         バイト長を全体のバイト長だと勘違いして4にしている。
+   [措置]2にした。
+   --> akxcode.c
+
+(8)EUCの半角カナ文字をprintすると変換エラーとなる。
+   [原因]EUCの半角カナ文字をUTF8に変換するとき、iconvがエラーを返している。
+   [措置]EUC文字列中に0x8eがあったらakxc_str_conv_native()を使うようにした。
+   --> akxcodeap.c
+
+
+<2026.02.06>
+(9)初期値設定で、データ個数が1000を超えるとエラーになる。
+   [原因]コンパイル時に、atrにidaを加えているが、atrは>=1000で分類しているため、
+         データ個数が1000を超えるとatrを壊している。
+   [措置]データ個数が1000を超えたときは、エラーになるようにした。
+   --> cl_gx_compile.c, clconst.h
+
+<2026.03.11>
+(10)ruby/try3.clを実行すると、集約演算で落ちる。
+   [原因]_check_mk_key()の中で、Malloc/Reallocしているが、データ長までしか取っていないのに、
+         末尾にnull文字を付加している。
+   [措置]Malloc/Reallocのデータ長を+1した。
+   --> cl_gx_rep_prm_set.c
+
+<2026.03.13>
+(11)for eachで、配列やデータ並び式の式の並びで指定し、最後の項目のみに'*'を付けると、
+   全ての項目で、'*'を付けたことになる。
+   [原因]最後の項目のみに'*'を付けると、pInfoParmWがデータ指定になっており、
+         _get_loop_max_each()の中で、これを各項目に設定している。
+   [措置]_gx_ex_obj_end_narabi()を呼ぶ前に、irs>1のときは、データ指定をクリアした。
+         また、_gx_ex_obj_end_narabi()にiDEF_ZOK_DATAを渡しているが、これは効いていないので、
+         0に設定した。
+   --> cl_gx_ex_obj.c
+
+(12)echo '---[3..6,''A''..''C'']'が、3..6と'A'の間に演算子がないのエラーになる。
+   [原因]'['を判定するときに、引用符内かのチェックが、quoteになっている。
+   [措置]quote1に修正した。
+   --> cllex.c
+
+<2026.03.16>
+(13)test_combination.clの中のprint cmb.countv();を生かすと、_clear_var_obj()の中で落ちる。
+    print countv(cmb);のときは、落ちない。
+   [原因]pParmW=obj0[ib0]のあとのpParmW->pi_idを参照して落ちている。
+   [措置]原因不明のため、暫定で、
+         pParmWのアドレスが、0x70000000と0x60000000を含んでいるときは、continueとした。
+   --> cl_gx_ex_obj.c
+
+
+(14)for x=0 To a.countv()-1;を実行すると、for x=0 To a.countv() -1;となって、
+    STEPがありません。のエラーになる。2重引用符で囲っても同じ。
+   [原因]cllex()の中で、')'が来たときに、引用符(')外で、kk_level=0で、')'の次がスペースでなく、
+         コマンドがFORのとき、区切りにしている。
+   [措置]上記で、')'の次が、引用符(1重と2重)を除く区切り文字のときは、区切りにしないようにした。
+         akxlib.cに、is_kuuhaku()を追加した。(is_kuuhaku()は使わなくなった)
+         2重引用符の中では、無条件に区切りにしないようにした。
+   --> cllex.c, akxlib.c, akxlib.h
+
+(15)for x=a.countv()-1 To a.countv()-1;を実行すると、for x=a.countv() -1 To a.countv() -1;
+    となるが、TO、STEP扱いにならない。
+   [原因]prmL[2]->prpが"TO"のときのみ、TO、STEPの扱いにしている。
+   [措置]最初にパラメータ中に、"TO"または"STEP"があるかどうかを調べ、あったら、位置が正しいかを
+         チェックし、正しいときは、TO、STEPの扱いにし、"TO"がないときは、エラーとした。
+   --> cltrloop.c
+
+<2026.03.30>
+(16)test_hash_class.clを実行すると、dataが予約語ですのエラーになる。
+   [原因]IS 'T...'の機能を追加する際に、osize=3,selector=0x200として"DATAMODE"を登録したため
+         予約語となった。(予約語チェックでは、selector=0xffffとしている)
+   [措置]IS 'T...'用には、selector=0x2000とし、予約語チェックでは、selector=0x0fffとした。
+   --> cltrbexp.c, cl_gx_compile.c
+
+(17)test_proc_parm.clを実行すると、「[coal] cl_pr_ex_def_map_ary: 範囲指定(1[512,0,1])が
+    変数配列の個数(512)を超えています。」のエラーになる。
+   [原因]cl_pr_ex_def_map_ary()で、引数argvを作成しているが、_set_index()を呼ぶときに、
+         番号配列の開始indexを1に設定していない。
+   [措置]_set_index()の第一引数に、0x100を設定した。
+   --> clprdef.c
+
+<2026.04.04>
+(18)print "'ABCD' & '\t'";を実行すると、'\'が消える。
+   [原因]引用符をpush,popする前に使用していたquote2が残っており、'\t'の最初の'のときに、
+         quote2!=quoteの条件付きで、"の中の'の処理を開始するようになっており、quote2==quoteと
+         なっているために、'の処理が開始できず、\が捨てられている。
+   [措置]quote2を含む代入や比較をコメントとした。
+   --> cllex.c
+
+<2026.04.08>
+(19)sample_dentaku2.clが、Ctl-Dで終わらない。
+   [原因]charがたの$typeに'\0'を代入しているが、parm_to_char()の中で、akxstrnlen()を
+         通しているため''になっている。
+   [措置]akxstrnlen()を止めた。
+   --> cl_cmpt_string.c
+
+<2026.04.11>
+(20)lookup(c,'３',2)で、'3'が一致しない。
+   [原因]akxmbncmp_type_opt_m()で比較している。比較の段階では、一致となるが、最後に、
+         文字列長(nstr1,nstr2)が同じでないと不一致にしている。
+   [措置]半角全角を問わないときは、nstr1,nstr2が全角での文字列長になるようにした。
+   --> akxstring.c
+
+(21)lookup(b,'%YZ%',0x802)で、'BＹＺCxyW980'が一致しない。
+   [原因]cl_cmpt_comp_opt()で、LIKEを実行しているが、akxs_xlike()に渡すoptには、0x01の
+         ビットしか渡していない。
+   [措置]cmp_optの0x02も渡すようにした。cmp_optのD_COMP_FUN_REVERCEとD_COMP_OPT_LNGMATCHも
+         optに反映するようにした。
+   --> cl_cmpt_comp.c, clconst.h
+
+<2026.04.17>
+(22)exec_all_test.clでimportを含むスクリプトを実行すると、その中のERROROUT()が表示されない。
+   [原因]TRY中(pGlobTable->try_level>0)は、ERROROUT()が表示されないようになっており、
+         呼び出しスクリプトにTRYを波及させるかどうかの制御を行っている。
+         exec_all_test.clでは、波及させない設定になっているが、この設定は、cl_exe_scr_file_init()
+         の中のcl_exe_scr_set_up()を実行した後で行っている。import処理は、cl_exe_scr_set_up()の
+         中で行っているため、TRYの中の状態になっているため、ERROROUT()が表示されていない。
+   [措置]波及させるかどうかを制御する変数iOPT_TRYPASSの設定をcl_exe_scr_set_up()の前に移動させ、
+         cl_exe_scr_set_up()に渡して、import～define処理前にpGlobTable->try_levelを
+         設定するようにした。
+         (注)呼び出しスクリプトの実行中のみpGlobTable->try_levelを変更するようにする必要がある。
+   --> clexscr.c
+
+<2026.04.19>
+(23)test_import3.clをexec_test_all.clで実行すると落ちる。cl_prc_ct_clear()
+   [原因]cl_prc_ct_clear()の中のproc->ProcPathが'*'始まりかをチェックしているところで落ちている。
+   [措置]proc->ProcPathのは、pbxObj->da[0]が入っており、'*'始まりのときは、Malloc()した値が
+         入っている。proc->ProcPathは、ADDRCHK()でチェックしているが、pbxObj->da[0]には、
+         関数内のauto変数が入ることがあるため、このときは、cl_prc_ct_clear()を実行するときは、
+         不正なアドレスになっており、そのために落ちている。
+   [措置]pbxObj->da[0]に関数内のauto変数が入っているのか、Malloc()されたpbxObj->da[0]が入って
+         いるのかが分からないため、proc->ProcPathのアドレスがMalloc()されたアドレスかどうかを
+         判別する関数(マクロADDRCHK_FREE())を作成し、これでチェックするようにした。
+   --> akxmemtool.c, akxcommon.h, clclear.c, cmmacro.h, clprot.h
+
+<2026.04.22>
+(24)text.'S/45/XY/'で、置換されない。
+   [原因]_gx_str_rep()の中で、パターン文字列から、検索文字列、置換文字列、オプション文字列を
+         取り出しているが、S(or s)のときは、S(or s)の次の/以降が渡されて来る、他のときは、
+         先頭の/または//の次以降が渡されて来る。
+         そこで、S(or s)のときは、パターン文字列の先頭を1バイト進めているが、バイト位置を
+         示すiも+1している。これにより、pos1(schlen)が1多くなっている。
+         バイト位置は、0から始まるで良いので、+1が余計である。
+   [措置]i++;を削除した。
+   --> cl_cmpt_comp.c
+
+(25)上記修正により、オプションに'g'を指定すると、「{i | g}以外は指定できません。」のエラーが
+    出るようになった。
+   [原因]replenは、pos2-pos1なので問題なしであるが、optlenは、patlen-pos2-1としており、pos2が
+         1小さくなったため、optlenが1バイト長くなっている。、
+   [措置]optlen = patlen - pos2 - 2 とした。
+   --> cl_cmpt_comp.c
+
+<2026.04.30>
+(26)exec_all_test.clを実行すると途中で落ちる。
+   [原因]hashのuflのエリアとしてmaxreg個取っているが、maxreg+1個使っており、mallocの管理情報を
+         壊していた。
+   [措置]uflのエリアをmaxreg+1個とした。
+   --> akxshash.c, akxmemtool.c
+
+<2026.05.02>
+(27)test_mbslex_euc.clを実行すると返ってこない。
+   [原因]半角カナを半角に変換する処理の中で_zen2kigo()が呼ばれている。ここで、受け取ったus(ushort)を
+         の最上位ビットが１のとき、n(int)に代入するところで符号拡張が起こり負になっている。
+         nを使って求めているハッシュ値も負になり、処理が不正になった。 
+   [措置]nの上位2バイトを0にするようにした。
+   --> akxcode.c
+
+<2026.05.03>
+(28)Python100_81-85.clを実行すると、「関数(My.suit)への代入はできません。」が出る。
+   [原因]以下を行ったために、インスタンス内のMyをコンストラクタ内からサーチできなくなった。
+         (1)pGLprocTable->CurScrに対して_set_node_path()を実行しなければならないため、、
+            cl_exe_scr_set_up()の_set_node_path()を復活させたときに、cl_pr_ex_import()での
+            _set_node_path()を消し忘れた。==>exec_all_test.clを実行すると、test_import.clで
+            落ちるようになる。
+         (2)cl_exe_scr_set_up()の方をコメント、cl_pr_ex_import()の方は削除した。         
+   [措置]cl_exe_scr_set_up()内のscrprct->TreeTopの_set_node_path()をimport処理の前へ移動、
+         pGLprocTable->CurScrの_set_node_path()をimport処理後に移動した。
+   --> clprimport.c, clexecscr.c, cl_gx_ex_obj.c
+
+(29)コンストラクタの中でエラーになっても処理が止まらない。
+   [原因]cl_exec_func_execute()でコンストラクタを実行しているが、そもそも、これは、
+         コンストラクタを実行のエラーを返さない。
+         また、cl_node_process_opt()で、ノード実行エラー(rc)が、rc = _pr_ret(rc,leaf,proc,1)
+         としているために、0になり、このrcをpGlobTable->errorに入れているに、これも0になっている。
+   [措置]cl_node_process_opt()で、まず、pGlobTable->error=rcとし、(opt7 & 0x02)がONのときに、
+         pGlobTable->error=0とするようにした。
+         さらに、cl_exec_func_execute()の実行のあとで、rc=pGlobTable->errorとした。
+   --> clnode.c, cl_class.c, clmessage.c
+
+
+<2026.05.04>
+(30)sample_try_cat.clを実行するとloopが1回終わったときに、「fpはclose済みです。」になる。
+   [原因]cl_node_control()の中で、procct->NextleafがNULLのときに、leafをpopしているが、
+         このときに、_close_try_with_resources()を呼んでいる。
+         これは、tryが正常終了したときに、_close_try_with_resources()を実行する意図と
+         思われるが、無条件になっている。
+   [措置]proc->ucExcept==D_EXCEPT_TRY(例外が起きていない)、かつ、popしたleafが
+         catch,finally,end tryのどれかのときに、_close_try_with_resources()を実行するようにした。
+   --> clnode.c
+
+<2026.05.09>
+(31)式の実行でobj0[]が最初に'U'になると、それ以降,最新化されない。
+   [原因]pop()の後に_ex_conv_parm_opt()の中で、'U'のときは、cl_conv_parm_opt()で変換しているが、
+         obj0[]の情報がないため、結果がobj0[]に反映されていない。
+   [措置]PUSH=91時に呼ばれる_conv_arg_opt2()には、obj0[]がpInfoParmWとして渡されて来る。
+         この中で、'U'になったときは、pInfoParmW->pi_paux=pInfoParmWとし、obj0[]を保存する。
+         _ex_conv_parm_opt()の中では、変換後、pInfoParmW->pi_pauが指すobj0[]を更新する。
+   --> cl_gx_compile.c, cl_gx_ex_obj.c
+
+(32)forの中でBLOCK変数が作られたとき、forを抜けて、再び同じforが実行されたとき、前のforで
+    作られた変数を見てしまう。
+   [原因]obj0[]が残っているので、それを使っている。
+   [措置]for等のブロックを抜けたときは、下位のブロックを含め、その中で作られた変数のobj0[]を
+         クリアするようにした。
+   --> cl_if_pre_proc.c, cl_gx_ex_obj.c
+
+<2026.05.11>
+(33)ブロックのpha_vnamが毎回mallocされる。
+   [原因]cl_add_block_cb()では、ブロック構造体を再利用しているが、pha_vnamを退避せずに、
+         0クリアしている。また、cl_prc_ct_clear()で、ブロックをFree()しているが、
+         pha_vnamをFree()していない。
+   [措置]cl_add_block_cb()では、pha_vnamを退避するようにした。
+         cl_prc_ct_clear()では、cl_pha_vnam_free()とakxs_xhash_free_opt()を呼ぶようにした。
+   --> cl_if_pre_proc.c, clclear.c
+
+<2026.05.14>
+(34)変数xyzが未定義の状態で、undefine $(concat('x','y','z'))を実行すると、
+    「(concat('x','y','z'))」のエラーになる。
+   [原因]_undef()の中では、削除する変数名が式のときは、S形式のpi_hlenに入っているParmNoから
+         変数名を求めているが、ParmNo=0でcl_gx_exp_obj_opt()から返ってきているために、
+         式を変数名の変わりに出している。
+         cl_func_conv_parm()でcl_gx_get_info_parm_opt_psize()から返ってきた後で、
+         (c=='$' && nparm>0)のときに、cl_set_pSize_index()を呼んで、pi_hlenにParmNoを
+         設定するようにしているが、cが未設定だった。
+   [措置]「c=='$' &&」を外した。加えて、ポインタでないという条件を追加した。
+   --> clfunc.c
+
+<2026.05.15>
+(35)$('xyz')を参照しただけで、変数xyzが作成される。
+   [原因]cl_gx_ex_obj_sub()の最初で、関数実行に渡すopt0に、D_GX_OPT_STOREを立てているために、
+         $関数で変数を作成している。
+   [措置]関数実行に渡すopt0に、D_GX_OPT_STOREを立てないようにした。
+         cl_func_conv_parm()では、D_GX_OPT_STOREが立っているときに、cl_set_pSize_index()を
+         呼んでいるので、このif文をなくし、S形式でないときに、S形式にするという条件を追加した。
+         また、最初に、optをD_GX_OPT_STOREとD_GX_OPT_SET_SCOPEビットのみにしていたが、
+         D_GX_OPT_GET_ADDRとD_GX_OPT_SET_ADDRを加えた。
+   --> clfunc.c
+
+<2026.05.16>
+(36)ブロック外で、block z = 1;を実行すると、「blockは指定できません。」が出て、local変数が
+作られるが、スコープ属性がblockになる。
+   [原因]zが未定義のときは、'U'のInfoParmが作られる。このとき、blockがあるために、pi_aux[0]に
+         BLOCKフラグが立つ。代入する前にzがlocalに作られ、pi_aux[0]のBLOCKフラグが引き継がれる。
+   [措置]zが作られた後で、ブロック外のときは、pi_aux[0]のBLOCKフラグを落とすようにした。
+   --> cl_conv_parm.c, cl_gx_ex_obj.c, clprot.h
+
+<2026.05.23>
+(37)print to_char(to_number('123.45',CLDEC,8,4));で"123.450"となる
+   [原因]m_100to10()の最後で、末尾が0のとき、桁数を-1している。
+         小数点以下が奇数桁のときは、これでも良いが偶数桁のときは、末尾が削られる。
+         これは、10進のときは、正しい桁数になっているが、100進にするときに偶数桁にしてから
+         1/2にしているため、奇数桁の情報が失われている。
+   [措置]m_scale()で、sacleが奇数桁のときは、optにAKX_MPA_OPT_SCA_FIXとAKX_MPA_OPT_SCA_ODDを
+         立て、m_100to10()では、固定長のときは、奇数けたのとき桁数を-1するようにし、
+         固定長でないのときは、今まで通りとした。
+   -->akxmpa.c, akxlib.h
+
+<2026.06.08>
+(38)akb.iniのCoalセクションに、defineを追加したが、置換されない。
+   [原因]defineテーブルに登録するときには、置換する値では、パラメータありは、'('始まり、
+         パラメータなしは、' '始まりにすることになっているが、値の後ろに' 'を付けている。
+   [措置]' '始まりになるようにした。
+   --> coalmain.c
+
+(39)コマンドラインで"-Dp(a)=print(a)"を指定して、"p 'AAA' aa;"を実行すると。aaが次の文の
+    先頭に付く形になる。
+   [原因]kugiri()からC_PARM_REP_DEFINEでリターンし、_rep_define_parm()が呼ばれ、pが置換
+         されずにリターンするとそうなる。原因不明。もし、正常に、"p 'AAA' aa;"の文になると
+         無限ループしていた。
+   [措置]kugiri()でのチェックで置換されるヶ所があるときのみC_PARM_REP_DEFINEでリターン
+         するようにした。
+   --> cllex.c
+
 <2026.XX.XX>
-(7)
+(40)
    [原因]
    [措置]
    --> 
