@@ -185,9 +185,14 @@ coal 7.6.0の機能改善およびバグｆｉｘ
 (38)10進固定小数点を含む演算の結果を10進固定小数点にするオプションを追加した。
    --> cl_cmpt_math.c, cl_gx_func_bexp.c
 
+<2026.07.12>
+(39)「cct memory management」において、設定したTAGまたは指定したTAG用のconst mem blockを
+    作成、操作できるようにした。
+   --> akxmemtool.c, akxmemtool.h
+
 <2026.XX.XX>
-(39)
-   --> 
+(40)関数TO_ITEMS()を追加した。
+   --> cl_gx_func_bexp.c, cl_cmpt_comp.c, clconst.h
 
 ********************************
 *           Bug fix            *
@@ -531,8 +536,41 @@ coal 7.6.0の機能改善およびバグｆｉｘ
          するようにした。
    --> cllex.c
 
+<2026.07.26>
+(40)SUM()で1個目整数、2個目以降は小数点付きの文字型の数値のリストを指定すると、
+    3個目で数字列の中に'M'があるのエラーになる。
+   [原因]cl_func_agg_sub()の中で、n-1個目(pInfoParm1)とn個目(pInfoParm2)までの合計(pInfoParm)を
+         求めた後は、pInfoParmの内容をpInfoParm1にコピーする。このとき、pInfoParmが
+         10進浮動小数点で、pInfoParm1が整数のときは、pInfoParm1のpi_dataは使えないので、
+         mpa用のエリアをpInfoParm1に確保してからコピーしている。pInfoParm1が整数でないときは、
+         pInfoParmのmpaのアドレスのみpInfoParm1->pi_dataにセットしている。
+         1個目と2個目は、cl_comp_info()の中で数値に変換され合計(pInfoParm)が返されるが、
+         cl_func_agg_sub()の中のpInfoParm1は、まだ、CHAR型のままであるため、3個目の処理に
+         行ったときは、pInfoParm1のデータはmpaでデータ型はCHARのため上記エラーになっている。
+   [措置]
+   --> 
+
+(41)test_Euler_s_constant.clを実行すると、
+    ①「print sum(to_items('N',`print /n- f1(i) for i=1 to %1`));」の後の
+    ②「print /n- f1(i) for i=1 to %1;」で、f1(i)の実行でエラーが出る。
+   [原因]①の中で、f1(i)を実行したときの、式のコンパイル情報が、①の終了時にFree()されているため。
+   [措置]①の実行時のscrct->LeafConstCtの保存と復元を止めた。
+   --> clfunc.c
+
+(42)sum()のデータが1つのとき、そのまま出力される。
+   [原因]データが1つのときは、演算されないため、数値への変換が行われず、そのまま出力されている。
+   [措置]返却値が文字のときは、数値に変換するようにした。
+   --> cl_cmpt_comp.c
+
+(43)cl_conv_upper2()で、pInfoParm1が、文字のdouble型でpInfoParm2がintのとき、pInfoParm1は
+    doubleになるが、pInfoParm1は、元のままになる。
+   [原因]pInfoParm1は、bouble型に変換されて、pInfoParm2と比較され、pInfoParm1はdoubleになるが、
+         pInfoParm1は、bouble型なので何もされない。
+   [措置]元の型と異なるときは、元の値を書き換えるようにした。
+   --> cl_cmpt_math.c
+
 <2026.XX.XX>
-(40)
+(44)
    [原因]
    [措置]
    --> 
