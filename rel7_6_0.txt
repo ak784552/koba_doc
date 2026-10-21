@@ -283,7 +283,10 @@ coal 7.6.0の機能改善およびバグｆｉｘ
     ②tdtClassCtlをclassID=1～3用に配列にした。
     ③wait packetを作るときに、pHead->cph_sinf.ind_clidにlInstanceHandleのclass IDを
       設定するようにした。
-   --> coalana.c, akainitregist.c, akamsgloop.c, akasendmsg.c
+    ④init スクリプト実行開始時に、pGLprocTable->ScrSt=1とし、終了時に、0にする。
+      pGLprocTable->ScrSt<>0のときは、本来のスクリプトをstartしない。
+      pGLprocTable->ScrSt=0のとき、本来のスクリプトをstartし、pGLprocTable->ScrSt=2とする。
+   --> coalmain.c, coalana.c, akainitregist.c, akamsgloop.c, akasendmsg.c
 
 <2026.XX.XX>
 (63)
