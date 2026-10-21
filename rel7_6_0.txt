@@ -74,7 +74,7 @@ coal 7.6.0の機能改善およびバグｆｉｘ
    --> cl_gx_logic.c, cl_gx_func_bexp.c, clconst.h, clprot.h, akxlib.c, akxlib.h
 
 <2026.03.23>
-(16)関数ROTSTE()を追加した。
+(16)関数ROTATE()を追加した。
    --> cl_gx_logic.c, cl_gx_func_bexp.c, clconst.h, clprot.h, akxlib.c, akxlib.h
 
 <2026.03.26>
@@ -190,9 +190,104 @@ coal 7.6.0の機能改善およびバグｆｉｘ
     作成、操作できるようにした。
    --> akxmemtool.c, akxmemtool.h
 
-<2026.XX.XX>
+<2026.07.27>
 (40)関数TO_ITEMS()を追加した。
    --> cl_gx_func_bexp.c, cl_cmpt_comp.c, clconst.h
+
+<2026.08.08>
+(41)直前の式の値を保持する変数 RESENT_VALUE を追加した。
+    return * で、RESENT_VALUEの値を返すようにした。
+   --> clexescr.c, cl_gx_imd.c, clpeet.c, clglobal.c, cl_conv_sysvar.c, clconst.h
+
+<2026.08.09>
+(42)不要な空白を削除する共通関数akxtidyngup()を追加した。
+   --> akxstring.c
+
+(43)LAMBDA()関数を追加した。
+   --> clfunc.c, cl_execute_proc.c, clmessage.c, cllocal.h
+
+(44)"{}"を関数化する式では、その場で、関数treeを作成するようにした。
+   --> clfunc.c, cl_execute_proc.c
+
+<2026.08.10>
+(45)プログラムtreeを画面に出力するコマンド(ptree)を追加した。
+    printf()を使っていたのをCLPRINT()、CLPRINTF1()マクロを作成し、これを使うようにした。
+   --> clexescr.c, cmmacro.h
+
+<2026.08.15>
+(46)ELEMENT()とARRAYBXP()の演算に関数を指定できるようにした。
+   --> cl_cmpt_logic.c, cl_gx_rep_set.c
+
+<2026.08.16>
+(47)ARRAYBXP(),ELEMENT()で、iterateを使うようにした。
+   --> cl_gc_rep_set.c, cl_cmpt_logic.c,
+
+<2026.08.17>
+(48)配列、リスト、データ並びを作成し、データをセットする共通関数(cl_new_array_or_list(),
+    cl_set_array_or_list)を作成し、ELEMENT()に適用した。
+   --> cl_gx_get_index.c, cl_cmpt_logic.c
+
+<2026.08.20>
+(49)ARRAYCPY()でリストとデータ並びも指定できるようにした。
+   --> cl_gx_rep_set.c, cl_gx_get_index.c
+
+<2026.08.29>
+(50)FUNCキャストにFUNC(opt)の形で、ff(ssss,opt)と同じオプションを設定できるようにした。
+    LAMBDA式や'{}'で作成する関数で、同じ関数が指定されたときのメッセージをLAMBDA式のときは、
+    "LAMBDA式"を埋め込むようにした。
+   --> cl_gx_compute.c, clmessage.c, cl_execute_proc.c
+
+<2026.09.03>
+(51)ADD,SUB,MUL,DIV,POWの演算子と関数を追加した。
+   --> cl_gx_compile.c, cl_gx_func_bexp.c, clconst.h
+
+<2026.09.07>
+(52)ARRAYCPY()で、関数名を指定できるようにした。
+   --> cl_gx_ret_set.c
+
+(53)ELEMENT()をACTIN()とACTAS()に変更した。
+   --> cl_gx_cmpt_logic.c, cl_gx_func_bexp.c, clconst.h, clprot.h
+
+<2026.09.14>
+(54)FILTER()関数を追加した。
+   --> cl_cmpt_logic.c, cl_gx_get_index.c, cl_gx_func_bexp.c, clconst.h
+
+<2026.09.15>
+(55)ACTAS()とACTIN()のNUMを第ニ引数にし、数値のときのみnumと見なすようにした。
+   --> cl_gx_logic.c, cl_gx_func_bexp.c, clconst.h
+
+(56)比較のデータＩＤのチェックを見直した。
+   --> cl_cmpt_comp.c
+
+<2026.09.24>
+(57)ARRAYCLR()で、関数名を指定できるようにした。
+   --> cl_gx_ret_set.c
+
+<2026.10.01>
+(58)[符号なし]整数定義、[符号なし]整数キャストにおいて、バイト数を指定できるようにし、
+    このバイト数で値を設定するようにした。
+   --> cl_gx_rep_parm_set.c, cl_cmpt_math.c, clprot.h
+
+<2026.10.06>
+(60)get_parm_bin系の関数の実体をget_parm_int系にし、get_parm_bin系は、defineにした。
+   --> cl_cmpt_math.c, cmmacro.h, clprot.h
+
+<2026.10.11>
+(61)DLL機能を追加した。
+   --> colmain.c, colanal.c, clprimport.c, akasendmsg.c, akaconst.h, akbstruct.h
+
+<2026.XX.XX>
+(62)bug no.59の修正を行なったが、init スクリプトでもsleep等を実行しても正常に
+    実行されるようにした。
+    ①init スクリプト実行用にclassID=2を追加した。
+    ②tdtClassCtlをclassID=1～3用に配列にした。
+    ③wait packetを作るときに、pHead->cph_sinf.ind_clidにlInstanceHandleのclass IDを
+      設定するようにした。
+   --> coalana.c, akainitregist.c, akamsgloop.c, akasendmsg.c
+
+<2026.XX.XX>
+(63)
+   --> 
 
 ********************************
 *           Bug fix            *
@@ -442,7 +537,6 @@ coal 7.6.0の機能改善およびバグｆｉｘ
          さらに、cl_exec_func_execute()の実行のあとで、rc=pGlobTable->errorとした。
    --> clnode.c, cl_class.c, clmessage.c
 
-
 <2026.05.04>
 (30)sample_try_cat.clを実行するとloopが1回終わったときに、「fpはclose済みです。」になる。
    [原因]cl_node_control()の中で、procct->NextleafがNULLのときに、leafをpopしているが、
@@ -547,8 +641,9 @@ coal 7.6.0の機能改善およびバグｆｉｘ
          1個目と2個目は、cl_comp_info()の中で数値に変換され合計(pInfoParm)が返されるが、
          cl_func_agg_sub()の中のpInfoParm1は、まだ、CHAR型のままであるため、3個目の処理に
          行ったときは、pInfoParm1のデータはmpaでデータ型はCHARのため上記エラーになっている。
-   [措置]
-   --> 
+   [措置]pInfoParmがdecimalで、pInfoParm1がdecimalでないときは、pInfoParm1にmpa2を設定してから
+         pInfoParmをコピーするようにした。
+   --> cl_cmpt_comp.c
 
 (41)test_Euler_s_constant.clを実行すると、
     ①「print sum(to_items('N',`print /n- f1(i) for i=1 to %1`));」の後の
@@ -569,8 +664,146 @@ coal 7.6.0の機能改善およびバグｆｉｘ
    [措置]元の型と異なるときは、元の値を書き換えるようにした。
    --> cl_cmpt_math.c
 
+<2026.07.28>
+(44)CLDECIが認識されない。
+   [原因]CLDECIMALをSysConstName[]に移す際にCLDECとCLDECIMALのみを登録したため
+   [措置]短縮形を許すシステム変数は、ExtValName2[]に登録し、これを見るようにした。
+   --> clglobal.c, cl_anal_parm.c
+
+<2026.08.03>
+(45)SUM()で、文字列の有理数を指定するとエラーになる。
+   [原因]文字列を数値に変換するのにcl_conv_const_nstr()を使っているが、これが通常の数値しか
+         想定していないのでエラーとなっている。
+   [措置]①akxqnumber(),cl_chk_digit_fopt()で、有理数と複素数の情報を返すようにした。
+         ②cl_conv_const_nstr()で最初の変換で有理数または複素数であることが分かったら、
+           /または+の次を変換して有理数または複素数として返すようにした。
+   --> akxconvn.c, cl_chk_digit.c, cl_cmpt_comp.c, akxlib.h
+
+<2026.08.04>
+(46)SUM()で複素数が扱えない。
+   [原因]処理が入っていない。
+   [措置]処理を追加した。
+   --> cl_cmpt_comp.c
+
+<2026.08.15>
+(47)MAX()に複素数を指定すると落ちる。
+   [原因]複素数を比較するために、cl_cmpt_complex()を使ってABSを取っているが、2番目の
+         InfoParmにNULLを指定しているために、cl_cmpt_complex()で落ちている。
+   [措置]ABSのときは、両方のInfoParmに同じものを指定することになっているので、そのようにした。
+   --> cl_cmpt_comp.c
+
+<2026.08.23>
+(48)10.0 - 3.0*3.6 が 0 になる。
+   [原因]10.0==>aa, 3.0*3.6(10.8)==>bb
+         aa->len=1, aa->num[]=10
+         bb->len=2, bb->num[]=10 80
+         m_cmp_a()で、aa->lenとbb->lenを比較するところが if (lena = lenb) rc = 0; と
+         なっており、num[]の比較はaa->lenまでになっているため、aaとbbが等しいことになっている。
+   [措置]'='を'=='に修正した。
+   --> akxmpa.c
+
+<2026.08.23>
+(49)test_arraybxpfunc2.clを実行すると、print arraybxp(r,b+5,a,5,like);で、「map位置が範囲外です」の
+    エラーになる。
+   [原因]map位置(i)が、i = index[3] + ix;になっている。
+   [措置]i = ix;にした。また、b+[5,5]の形式での処理も見直した。
+         以下、あらためて確認
+         b = a + [i,m];のときは、
+         index=ndim, max, set, offset, max1, ix1, ...
+         ndim max set max1 ix1 ...は、bの定義であり、offsetで元の配列でのmap位置を示す。
+         aが、index=1, 10, 10, 20, 10, 0 のときは、
+         bは、index=1, m, 10-i, 20+i, m, 0 となる。
+   --> cl_array.c
+
+<2026.08.28>
+(50)test9.clを実行すると、「###### akxm_free:no malloc (cl_conv_parm.c)[1202], free addr=20082858」
+    が出る。
+   [原因]メソッドinfoのメソッド名をFree()して、エラーが出ている。
+         cl_set_resent_value()でセットするinfoが1回前がメソッドで、セットに
+         cl_gx_rep_info_set()を使用しているために、メソッドをFree()している。
+         このとき、メソッド名がfree()される。スクリプト終了時に、元のメソッドがFree()され、
+         メソッド名がFree()されて、このメッセージが出る。
+   [措置]cl_gx_rep_info_set()ではなく、cl_gx_rep_info_set_ign()を使うようにした。
+   --> cl_gx_exp_imd.c
+
+<2026.08.30>
+(51)test_bexp_func.clを実行すると、bexp x = 41 SORT b c; print x; print *$(); で、b=10 なのに、
+    $()の先頭からが対象になる。
+   [原因]cl_num2maparray()で、開始位置(b=10)を設定しているが、配列の開始インデックスindex[5]に
+         設定している。
+   [措置]index[3]に設定するようにした。
+   --> clarray.c
+
+(52)test_bexp_func.clを実行すると、$1の値が、1つ前のxの値になる。
+   [原因]この前に、bexp x = 1 $ b c; print x; を実行している。$(1,b,c)を求めるcl_gx_bexp()が、
+         S形式で$(1)のアドレスを返しており、このまま、xに代入されている。そのために、
+         xが$1と同じになっている。
+   [措置]xに代入する前に、S形式を元に戻すようにした。
+   --> cl_gx_compute.c
+
+(53)arrayclr()で、最大設定済み要素までしかクリアあれない。
+   [原因]指定クリア数のチェックに最大設定済み要素数を使っている。
+   [措置]最大配列数を使うようにした。
+   --> cl_gx_rep_set.c
+
+<2026.08.31>
+(54)test_define_dec.clを実行すると落ちる。
+   [原因]cl_array_adjust_dec_val()で、forループをD_MAX_SCOPEで回しているが、
+         BLOCKが考慮されていない。
+   [措置]BLOCKの処理を追加した。
+   --> clfunc.c
+
+<2026.10.10>
+(55)ラインオプションのiを指定してスクリプトを実行すると、本来のスクリプトが実行されない。
+   [原因]スクリプトを実行した後で、無条件にSHUTモードにしているため、最初のスクリプトの
+         実行で終了している。
+   [措置]本来のスクリプトを実行するためのメッセージをPOSTした後で、SHUTクラスでメッセージを
+         POSTし、無条件にSHUTモードにするのを止め、SHUTクラスでメッセージを受け取ったときに、
+         SHUTモードにするようにした。
+   --> coalanal.c, akainitregist.c, akasendmsg.c, akamsgloop.c, akbstruct.h
+
+(56)ラインオプションのiの後ろに指定したスクリプトが実行されない。
+   [原因]col_mn_analz()でAKA_REGIST_CLASS時には、cpInstanceDataが"i"のときに、
+         コマンド0x0ffffff0のスクリプトを実行するようにしかなっていない。
+   [措置]①iオプションを"i[ ]init_script"から"i[init_script]"に変更。
+         ②cpInstanceDataには、init_scriptがないときは、"-i"を渡し、あるときは、
+           init_scriptを渡す。
+         ③col_mn_analz()では、"-i"のときは、コマンド0x0ffffff0のスクリプトを実行する、
+           init_scriptのときは、init_scriptを実行する。
+   --> coalmain.c, coalanal.c
+
+<2026.10.15>
+(57)"if (LOGLEVEL(log_no,-1) < level) then return 0;"で、LOGLEVELが置換されると、
+    thenが消えてしまう。 
+   [原因]置換処理が実行されるのは、thenを読んだ後であり、置換処理では、thenの前にthenの
+         後ろが追加されたものが、置換対象になるため。
+   [措置]ifの終わりがthenまたはthenlのときは、thenまたはthenlを挿入するようにした。
+   --> cllex.c
+
+<2026.10.16>
+(58)test_dll.clをoption 1を0x02に設定すると、sind()が関数でありませんのエラーになる。
+   [原因]cl_gx_get_all_var_ent_psize()の中で、option 1の0x02がONのときは、opt='s'に
+         している。このために、本来関数名であるものが変数として作成されてします。
+   [措置]上記を削除し、以下を追加した。
+         ①_ex_conv_parm_opt()の最後で、pInfoParmW->pi_id=='\0'でoption 1の0x02がONのときは、
+           pInfoParmWをNULL文字にするようにした。
+         ②'U'を変換したときに、ECL_NDEFVAR_ERRORのエラーであり、これをエラーにしない
+           オプションでないときは、option 1の0x02がONのときは、pInfoParmWをNULL文字に
+           するようにした。
+   --> cl_conv_parm.c, cl_gx_ex_obj.c
+
+<2026.10.19>
+(59)SLEEPコマンドを実行すると、スクリプトが終了する。
+   [原因]No.55の修正で、スクリプトの実行からリターンするとSHUTモードにしているため。
+   [措置]①本来のスクリプトを実行するためのメッセージをPOSTした後で、SHUTクラスでメッセージを
+         　POSTづるのを止めた。
+         ②ラインオプションのiで実行するときは、class=3にメッセージを送るようにした。
+         ③スクリプトの実行からリターンしたときに、class=3へのメッセージでなく、継続モード
+           (iDisp=1)でないとき、SHUTモードに設定するようにした。
+   --> coalmain.c, coalanal.c
+
 <2026.XX.XX>
-(44)
+(60)
    [原因]
    [措置]
    --> 
